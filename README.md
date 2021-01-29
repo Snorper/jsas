@@ -1,8 +1,10 @@
-<div align="center" style="margin: 3em">
+<div align="center">
   <a href="LICENSE"><img alt="License badge" src="https://img.shields.io/badge/License-MIT-blueviolet?style=for-the-badge&logo=appveyor?logoWidth=0"></a>
   <a href="https://github.com/tzipor/jsas/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/tzipor/jsas?color=blueviolet&style=for-the-badge"></a>
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/tzipor/jsas?color=blueviolet&style=for-the-badge">
 </div>
+
+<br>
 
 <div align="center">
   <img alt="Logo goes here" style="width: 25%; height: auto" src="logo.png">
@@ -33,9 +35,10 @@ Thus, *JSAS* was born. Written in Python, *JSAS* currently searches Indeed, Glas
 ```
 pip install requests
 ```
-- Beautiful Soup
+- Beautiful Soup using lxml parser
 ```
 pip install beautifulsoup4
+pip install lxml
 ```
 - Selenium
 ```
