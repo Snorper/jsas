@@ -21,6 +21,7 @@
 - [Issues and Ideas](#Issues-and-Ideas)
 - [Contributing](#Contributing)
 - [License](#License)
+- [Terms of Service](#Terms-of-Service)
 
 ## Background
 There are other projects floating around the internet which are similar to this, but none so far have provided everything I need out of a job search program. While looking for a program to use myself, I noticed a few problems:
@@ -120,3 +121,6 @@ If you are able to implement an improvement to *JSAS* and you feel so inclined, 
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## Terms of Service
+I do not condone using this software in cases where its use violates the terms of service of Indeed, Glassdoor, or Monster.
