@@ -7,6 +7,8 @@ from prep.helpers import HttpHelpers
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument("--test-type")
+options.add_argument('headless')
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 class gJobs:
     def __init__(self, url):
@@ -53,9 +55,8 @@ class gJobs:
             item = {
                 "title" : title_elem.text.strip(),
                 "company" : company_elem.text.strip(),
-                "href" : f'https://www.glassdoor.com{href}',
-                "loc" : loc_elem.text.strip(),
-                "date" : date_elem.text.strip()
+                "location" : loc_elem.text.strip(),
+                "href" : f'https://www.glassdoor.com{href}'
             }
             all_jobs.append(item)
 

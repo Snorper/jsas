@@ -45,9 +45,8 @@ class iJobs:
             item = {
                 "title" : title_elem.text.strip(),
                 "company" : company_elem.text.strip(),
-                "href" : f'https://www.indeed.com{href}',
-                "loc" : loc_elem.text.strip(),
-                "date" : date_elem.text.strip()
+                "location" : loc_elem.text.strip(),
+                "href" : f'https://www.indeed.com{href}'
             }
             all_jobs.append(item)
 

@@ -22,6 +22,7 @@ class mJobs:
         soup = BeautifulSoup(htmlcontent, 'lxml')
         jobs_container = soup.find(id='ResultsContainer')
         job_items = jobs_container.find_all('section', class_='card-content')
+        
         if job_items is None or len(job_items) == 0:
             return []
 
@@ -44,9 +45,8 @@ class mJobs:
             item = {
                 "title" : title_elem.text.strip(),
                 "company" : company_elem.text.strip(),
-                "href" : href,
-                "loc" : loc_elem.text.strip(),
-                "date" : date_elem.text.strip()
+                "location" : loc_elem.text.strip(),
+                "href" : href
             }
             all_jobs.append(item)
 
