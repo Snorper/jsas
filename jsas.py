@@ -3,18 +3,15 @@ import pandas as pd
 from prep import indeed, monster, glassdoor
 
 # search terms, formatted for each website. Modify in accordance with proper formatting
-printed_terms=['Python Developer','Math Major','Financial Analyst','Data Analyst','Data Engineer','Business Analyst']
-i_terms=['Python+Developer','Math+Major','Financial+Analyst','Data+Analyst','Data+Engineer','Business+Analyst']
-m_terms=['Python-Developer','Math-Major','Financial-Analyst','Data-Analyst','Data-Engineer','Business-Analyst']
-g_terms=['https://www.glassdoor.com/Job/bethpage-python-developer-jobs-SRCH_IL.0,8_IC1132187_KO9,25.htm?jobType=fulltime&fromAge=1&radius=30',
-         'https://www.glassdoor.com/Job/bethpage-math-major-jobs-SRCH_IL.0,8_IC1132187_KE9,19.htm?jobType=fulltime&fromAge=1&radius=30',
-         'https://www.glassdoor.com/Job/bethpage-financial-analyst-jobs-SRCH_IL.0,8_IC1132187_KO9,26.htm?jobType=fulltime&fromAge=1&radius=30',
+printed_terms=['Software Engineer','Data Analyst','Data Engineer']
+i_terms=['Software+Engineer','Data+Analyst','Data+Engineer']
+m_terms=['Software-Engineer','Data-Analyst','Data-Engineer']
+g_terms=['https://www.glassdoor.com/Job/bethpage-software-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,26.htm?jobType=fulltime&fromAge=1&radius=30',
          'https://www.glassdoor.com/Job/bethpage-data-analyst-jobs-SRCH_IL.0,8_IC1132187_KO9,21.htm?jobType=fulltime&fromAge=1&radius=30',
-         'https://www.glassdoor.com/Job/bethpage-data-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,22.htm?jobType=fulltime&fromAge=1&radius=30',
-         'https://www.glassdoor.com/Job/bethpage-business-analyst-jobs-SRCH_IL.0,8_IC1132187_KO9,25.htm?jobType=fulltime&fromAge=1&radius=30']
+         'https://www.glassdoor.com/Job/bethpage-data-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,22.htm?jobType=fulltime&fromAge=1&radius=30']
 
 # eliminate jobs if these words are found in the job title
-blacklist=['Senior','Sandwich','Cashier','Retail','Lead','Korean','VP','Director','Azure','Speech','Accountant','Tutor','Sales','Head','Advisor','Sr. ','Sr ','Summer','ecommerce','VP','Greeter','Full Stack']
+blacklist=['Senior','Sandwich','Cashier','Retail','Lead','Korean','VP','Director','Azure','Speech','Accountant','Tutor','Sales','Head','Advisor','Sr. ','Sr ','Summer','ecommerce','VP','Greeter','Full Stack','BCBA']
 
 # iterate over terms, returning a list of the search results from each website
 # modify indeed_url, monster_url, or g_terms to adjust search filters
@@ -35,13 +32,13 @@ for i in range(len(printed_terms)):
     print('----------------------------------------------')
     unfiltered_jobs.extend(glassdoor_jobs)
 
-    print(f'Searching Monster for "{printed_terms[i]}"...')
-    monster_url='https://www.monster.com/jobs/search/Full-Time_8?q='+m_terms[i]+'&intcid=skr_navigation_nhpso_searchMain&where=New-York__2c-NY&rad=50&tm=1'
-    monster1 = monster.mJobs(monster_url)
-    monster_jobs = monster1.get()
-    print(f'Found {len(monster_jobs)} jobs meeting the specified criteria')
-    print('----------------------------------------------')
-    unfiltered_jobs.extend(monster_jobs)
+    #print(f'Searching Monster for "{printed_terms[i]}"...')
+    #monster_url='https://www.monster.com/jobs/search/Full-Time_8?q='+m_terms[i]+'&intcid=skr_navigation_nhpso_searchMain&where=New-York__2c-NY&rad=50&tm=1'
+    #monster1 = monster.mJobs(monster_url)
+    #monster_jobs = monster1.get()
+    #print(f'Found {len(monster_jobs)} jobs meeting the specified criteria')
+    #print('----------------------------------------------')
+    #unfiltered_jobs.extend(monster_jobs)
 
 # sort jobs by title and remove all duplicates
 df = pd.DataFrame(unfiltered_jobs)
