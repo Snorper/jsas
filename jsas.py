@@ -1,10 +1,9 @@
 import pandas as pd
-from prep import indeed, monster, glassdoor
+from prep import indeed, glassdoor
 
 # search terms, formatted for each website. Modify in accordance with proper formatting
 printed_terms=['Software Engineer','Data Analyst','Data Engineer']
 i_terms=['Software+Engineer','Data+Analyst','Data+Engineer']
-m_terms=['Software-Engineer','Data-Analyst','Data-Engineer']
 g_terms=['https://www.glassdoor.com/Job/bethpage-software-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,26.htm?jobType=fulltime&fromAge=1&radius=30',
          'https://www.glassdoor.com/Job/bethpage-data-analyst-jobs-SRCH_IL.0,8_IC1132187_KO9,21.htm?jobType=fulltime&fromAge=1&radius=30',
          'https://www.glassdoor.com/Job/bethpage-data-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,22.htm?jobType=fulltime&fromAge=1&radius=30']
@@ -13,7 +12,7 @@ g_terms=['https://www.glassdoor.com/Job/bethpage-software-engineer-jobs-SRCH_IL.
 blacklist=['Senior','Sandwich','Cashier','Retail','Lead','Korean','VP','Director','Azure','Speech','Accountant','Tutor','Sales','Head','Advisor','Sr. ','Sr ','Summer','ecommerce','VP','Greeter','Full Stack','BCBA']
 
 # iterate over terms, returning a list of the search results from each website
-# modify indeed_url, monster_url, or g_terms to adjust search filters
+# modify indeed_url, or g_terms to adjust search filters
 unfiltered_jobs = []
 for i in range(len(printed_terms)):
     print(f'Searching Indeed for "{printed_terms[i]}"')
