@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 from prep import indeed, monster, glassdoor
 
@@ -32,14 +31,6 @@ for i in range(len(printed_terms)):
     print('----------------------------------------------')
     unfiltered_jobs.extend(glassdoor_jobs)
 
-    #print(f'Searching Monster for "{printed_terms[i]}"...')
-    #monster_url='https://www.monster.com/jobs/search/Full-Time_8?q='+m_terms[i]+'&intcid=skr_navigation_nhpso_searchMain&where=New-York__2c-NY&rad=50&tm=1'
-    #monster1 = monster.mJobs(monster_url)
-    #monster_jobs = monster1.get()
-    #print(f'Found {len(monster_jobs)} jobs meeting the specified criteria')
-    #print('----------------------------------------------')
-    #unfiltered_jobs.extend(monster_jobs)
-
 # sort jobs by title and remove all duplicates
 df = pd.DataFrame(unfiltered_jobs)
 df.drop_duplicates(subset=['title', 'company', 'location'],keep='first',inplace=True)
@@ -53,9 +44,7 @@ for i, row in df.iterrows():
         to_drop.append(i)
 df.drop(df.index[to_drop], inplace=True)
 
-# delete results.csv if it exists and add jobs to new results.csv
-if os.path.exists('results.csv'):
-    os.remove('results.csv')
+# Write jobs df to results.csv
 df.to_csv('results.csv',index=False)
 
 print('Job search complete! Check results.csv.')
