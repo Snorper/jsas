@@ -32,6 +32,7 @@ There are other projects floating around the internet which are similar to this,
 Thus, *JSAS* was born. Written in Python, *JSAS* currently searches Indeed and Glassdoor for jobs. Duplicates are removed, then jobs are sorted, filtered, and returned in a CSV file.
 
 ## Requirements
+NEW: try `pip install -r requirements.txt`
 - Requests
 ```
 pip install requests
