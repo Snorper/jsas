@@ -38,16 +38,16 @@ Selenium requires a driver to interface with web browsers. For Chrome, this is [
 
 Searches are performed by taking terms from a list and plugging them into a URL for each website. Unfortunately and unsurprisingly, the terms must be formatted differently for each of the currently supported websites. For Indeed, terms containing multiple words must have the words separated by a plus symbol. Things get more annoying with Glassdoor. From what I've seen, the only way to make this work is for the search terms to be the entire URL, meaning a much longer list is necessary. I recommend performing the searches manually once and copying the links into the list. The search terms for Indeed  and Glassdoor are respectively stored in `i_terms` and `g_terms`, and `p_terms` is the same list formatted in regular English with spaces:
 ```toml
-p_terms=['oneword','two words']
-i_terms=['oneword','two+words']
-g_terms=['https://www.glassdoor.com/Job/new-york-software-engineer-jobs-SRCH_IL.0,8_IC1132348_KO9,26.htm...']
+p_terms=["oneword","two words"]
+i_terms=["oneword","two+words"]
+g_terms=["https://www.glassdoor.com/Job/new-york-software-engineer-jobs-SRCH_IL.0,8_IC1132348_KO9,26.htm..."]
 ```
 Note that Glassdoor searches are performed using Selenium and therefore take more time than Indeed searches.
 
 By utilizing `blacklist`, jobs whose titles contain undesired terms can optionally be removed from consideration. The titles are strings, so this time terms containing multiple words can be written with spaces between those words:
 
 ```toml
-blacklist=['oneword', 'two words']
+blacklist=["oneword", "two words"]
 ```
 
 Filtering results by location, distance, and other site-specific job information is done by editing the URL before inserting the search term. This is done through `g_terms` in the case of Glassdoor and `i_string` for Indeed. `i_string` is simple enough to modify, but you could perform a manual search to get a template for the URL corresponding to your needs. Each Glassdoor URL should be individually created by doing a manual search once.
