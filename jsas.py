@@ -1,22 +1,32 @@
 import pandas as pd
+import ltoml
 from prep import indeed, glassdoor
 
-# search terms, formatted for each website. Modify in accordance with proper formatting
-printed_terms=['Software Engineer','Data Analyst','Data Engineer']
-i_terms=['Software+Engineer','Data+Analyst','Data+Engineer']
-g_terms=['https://www.glassdoor.com/Job/bethpage-software-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,26.htm?jobType=fulltime&fromAge=1&radius=30',
-         'https://www.glassdoor.com/Job/bethpage-data-analyst-jobs-SRCH_IL.0,8_IC1132187_KO9,21.htm?jobType=fulltime&fromAge=1&radius=30',
-         'https://www.glassdoor.com/Job/bethpage-data-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,22.htm?jobType=fulltime&fromAge=1&radius=30']
+with open('config.toml') as t:
+    tml = t.read()
+
+try:
+    cfg = ltoml.loads(tml)
+except ltoml.TOMLDecodeError:
+    print("F")
+
+# search criteria from config.toml
+printed_terms = cfg['p_terms']
+i_terms = cfg['i_terms']
+i_string = cfg['i_string']
+g_terms = cfg['g_terms']
+state = cfg['state'][0]
+stateBool = cfg['state'][1]
 
 # eliminate jobs if these words are found in the job title
-blacklist=['Senior','Sandwich','Cashier','Retail','Lead','Korean','VP','Director','Azure','Speech','Accountant','Tutor','Sales','Head','Advisor','Sr. ','Sr ','Summer','ecommerce','VP','Greeter','Full Stack','BCBA']
+blacklist = cfg['blacklist']
 
 # iterate over terms, returning a list of the search results from each website
 # modify indeed_url, or g_terms to adjust search filters
 unfiltered_jobs = []
 for i in range(len(printed_terms)):
     print(f'Searching Indeed for "{printed_terms[i]}"')
-    indeed_url='https://www.indeed.com/jobs?q='+i_terms[i]+'&l=Bethpage,+NY&radius=30&jt=fulltime&explvl=entry_level&fromage=1'
+    indeed_url='https://www.indeed.com/jobs?q='+i_terms[i]+i_string
     indeed1 = indeed.iJobs(indeed_url)
     indeed_jobs = indeed1.get()
     print(f'Found {len(indeed_jobs)} jobs meeting the specified criteria')
@@ -39,7 +49,7 @@ df.reset_index(drop=True, inplace=True)
 # remove jobs with blacklisted words in title or location out of state
 to_drop = []
 for i, row in df.iterrows():
-    if any(bad_word in row['title'] for bad_word in blacklist) or row['location'][len(row['location']) - 2:] != 'NY':
+    if any(bad_word in row['title'] for bad_word in blacklist) or (row['location'][len(row['location']) - 2:] != state and stateBool == True):
         to_drop.append(i)
 df.drop(df.index[to_drop], inplace=True)
 

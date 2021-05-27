@@ -1,0 +1,34 @@
+# Configuration file for github.com/tzipor/jsas
+# Rename "config.toml" and fill in with your desired data
+
+# Write search terms in plain English
+p_terms = [
+    "Software Engineer",
+    "Software Developer",
+]
+
+# Write search terms with '+' instead of spaces
+i_terms = [
+    "Software+Engineer",
+    "Software+Developer",
+]
+
+# Miscellaneous criteria for Indeed searches. Modify based on any search for your location, age, etc.
+i_string = "&l=Bethpage,+NY&radius=30&jt=fulltime&explvl=entry_level&fromage=1"
+
+# Do a Glassdoor search for each term once, add desired filters, and copy links into this list
+g_terms = [
+    "https://www.glassdoor.com/Job/bethpage-software-engineer-jobs-SRCH_IL.0,8_IC1132187_KO9,26.htm?jobType=fulltime&fromAge=1&radius=30",
+    "https://www.glassdoor.com/Job/bethpage-software-developer-jobs-SRCH_IL.0,8_IC1132187_KO9,27.htm?jobType=fulltime&fromAge=1&radius=30",
+]
+
+# If a job title contains any of these words, that job will be ignored
+blacklist = [
+    "Senior","Sandwich","Cashier"
+]
+
+# Put your state's abbreviation here and specify whether or not to filter for it (true-false)
+state = [
+    "NY",
+    true
+]
