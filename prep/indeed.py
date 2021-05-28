@@ -33,9 +33,8 @@ class iJobs:
             title_elem = job_elem.find('a', class_='jobtitle')
             company_elem = job_elem.find('span', class_='company')
             loc_elem = job_elem.find('span', class_='location')
-            date_elem= job_elem.find('span', class_='date')
 
-            if None in (title_elem, company_elem, url_elem, loc_elem, date_elem):
+            if None in (title_elem, company_elem, url_elem, loc_elem):
                 continue
 
             href = url_elem.get('href')

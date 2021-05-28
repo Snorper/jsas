@@ -43,9 +43,8 @@ class gJobs:
             title_elem = job_elem.find(attrs={"data-test": "job-link"})
             company_elem = job_elem.find('a', class_='css-l2wjgv e1n63ojh0 jobLink')
             loc_elem = job_elem.find('span', class_='pr-xxsm css-1ndif2q e1rrn5ka0')
-            date_elem= job_elem.find(attrs={"data-test": "job-age"})
 
-            if None in (title_elem, company_elem, url_elem, loc_elem, date_elem):
+            if None in (title_elem, company_elem, url_elem, loc_elem):
                 continue
 
             href = url_elem.get('href')
