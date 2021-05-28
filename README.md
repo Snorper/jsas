@@ -29,7 +29,7 @@ pip install beautifulsoup4
 pip install lxml
 pip install selenium
 pip install pandas
-pip install ltoml
+pip install tomli
 ```
 Selenium requires a driver to interface with web browsers. For Chrome, this is [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads). If you run into issues with Glassdoor and Selenium, try using ChromeDriver and following the first answer from [this Stack Overflow post](https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver).
 

@@ -1,13 +1,13 @@
 import pandas as pd
-import ltoml
+import tomli
 from prep import indeed, glassdoor
 
 with open('config.toml') as t:
     tml = t.read()
 
 try:
-    cfg = ltoml.loads(tml)
-except ltoml.TOMLDecodeError:
+    cfg = tomli.loads(tml)
+except tomli.TOMLDecodeError:
     print("F")
 
 # search criteria from config.toml
