@@ -1,2 +1,2 @@
-$urls = Import-Csv ..\results.csv | select -ExpandProperty href
+$urls = Import-Csv .\results.csv | select -ExpandProperty href
 foreach ($url in $urls) {Start $url}
