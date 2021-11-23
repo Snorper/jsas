@@ -20,8 +20,8 @@ class iJobs:
 
     def __parse_index(self, htmlcontent):
         soup = BeautifulSoup(htmlcontent, 'lxml')
-        jobs_container = soup.find(id='resultsCol')
-        job_items = jobs_container.find_all('div', class_='jobsearch-SerpJobCard')
+        jobs_container = soup.find(id='mosaic-provider-jobcards')
+        job_items = jobs_container.find_all('a', class_='resultWithShelf')
 
         if job_items is None or len(job_items) == 0:
             return []
@@ -29,10 +29,10 @@ class iJobs:
         all_jobs = []
 
         for job_elem in job_items:
-            url_elem = job_elem.find('a', class_='jobtitle')
-            title_elem = job_elem.find('a', class_='jobtitle')
-            company_elem = job_elem.find('span', class_='company')
-            loc_elem = job_elem.find('span', class_='location')
+            url_elem = job_elem
+            title_elem = job_elem.find('h2', class_='jobTitle')
+            company_elem = job_elem.find('span', class_='companyName')
+            loc_elem = job_elem.find('div', class_='companyLocation')
 
             if None in (title_elem, company_elem, url_elem, loc_elem):
                 continue
@@ -40,11 +40,13 @@ class iJobs:
             href = url_elem.get('href')
             if href is None:
                 continue
+            title_elem_text = title_elem.text.strip()[3:]
 
             item = {
-                "title" : title_elem.text.strip(),
+                "title" : title_elem_text,
                 "company" : company_elem.text.strip(),
                 "location" : loc_elem.text.strip(),
+                #"href" : href
                 "href" : f'https://www.indeed.com{href}'
             }
             all_jobs.append(item)

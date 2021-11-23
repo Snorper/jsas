@@ -33,12 +33,14 @@ for i in range(len(printed_terms)):
     print('----------------------------------------------')
     unfiltered_jobs.extend(indeed_jobs)
 
-    print(f'Searching Glassdoor for "{printed_terms[i]}"...')
-    glassdoor1 = glassdoor.gJobs(g_terms[i])
-    glassdoor_jobs = glassdoor1.get()
-    print(f'Found {len(glassdoor_jobs)} jobs meeting the specified criteria')
-    print('----------------------------------------------')
-    unfiltered_jobs.extend(glassdoor_jobs)
+# fix this after Indeed
+
+    #print(f'Searching Glassdoor for "{printed_terms[i]}"...')
+    #glassdoor1 = glassdoor.gJobs(g_terms[i])
+    #glassdoor_jobs = glassdoor1.get()
+    #print(f'Found {len(glassdoor_jobs)} jobs meeting the specified criteria')
+    #print('----------------------------------------------')
+    #unfiltered_jobs.extend(glassdoor_jobs)
 
 # sort jobs by title and remove all duplicates
 df = pd.DataFrame(unfiltered_jobs)
