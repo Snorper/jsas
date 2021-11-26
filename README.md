@@ -1,5 +1,3 @@
-IMPORTANT: this software is partially functional as of 22 Nov 2021. Functionality has been restored to indeed.py and glassdoor.py is under investigation.
-
 <div align="center">
   <img alt="Logo goes here" style="width: 25%; height: auto" src="logo.png">
 </div>
