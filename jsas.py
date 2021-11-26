@@ -47,11 +47,11 @@ df.sort_values(by=['title'],inplace=True)
 df.reset_index(drop=True, inplace=True)
 
 # remove jobs with blacklisted words in title or location out of state
-#to_drop = []
-#for i, row in df.iterrows():
-#    if any(bad_word in row['title'] for bad_word in blacklist) or (row['location'][len(row['location']) - 2:] != state and stateBool == True):
-#        to_drop.append(i)
-#df.drop(df.index[to_drop], inplace=True)
+to_drop = []
+for i, row in df.iterrows():
+    if any(bad_word in row['title'] for bad_word in blacklist) or (row['location'][len(row['location']) - 2:] != state and stateBool == True):
+        to_drop.append(i)
+df.drop(df.index[to_drop], inplace=True)
 
 # Write jobs df to results.csv
 df.to_csv('results.csv',index=False)
