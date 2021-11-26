@@ -25,6 +25,7 @@ blacklist = cfg['blacklist']
 # modify indeed_url, or g_terms to adjust search filters
 unfiltered_jobs = []
 for i in range(len(printed_terms)):
+    # commented out while I fix glassdoor.py
     print(f'Searching Indeed for "{printed_terms[i]}"')
     indeed_url='https://www.indeed.com/jobs?q='+i_terms[i]+i_string
     indeed1 = indeed.iJobs(indeed_url)
@@ -32,8 +33,6 @@ for i in range(len(printed_terms)):
     print(f'Found {len(indeed_jobs)} jobs meeting the specified criteria')
     print('----------------------------------------------')
     unfiltered_jobs.extend(indeed_jobs)
-
-# fix this after Indeed
 
     #print(f'Searching Glassdoor for "{printed_terms[i]}"...')
     #glassdoor1 = glassdoor.gJobs(g_terms[i])
@@ -49,11 +48,11 @@ df.sort_values(by=['title'],inplace=True)
 df.reset_index(drop=True, inplace=True)
 
 # remove jobs with blacklisted words in title or location out of state
-to_drop = []
-for i, row in df.iterrows():
-    if any(bad_word in row['title'] for bad_word in blacklist) or (row['location'][len(row['location']) - 2:] != state and stateBool == True):
-        to_drop.append(i)
-df.drop(df.index[to_drop], inplace=True)
+#to_drop = []
+#for i, row in df.iterrows():
+#    if any(bad_word in row['title'] for bad_word in blacklist) or (row['location'][len(row['location']) - 2:] != state and stateBool == True):
+#        to_drop.append(i)
+#df.drop(df.index[to_drop], inplace=True)
 
 # Write jobs df to results.csv
 df.to_csv('results.csv',index=False)

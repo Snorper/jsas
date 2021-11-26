@@ -21,6 +21,9 @@ class iJobs:
     def __parse_index(self, htmlcontent):
         soup = BeautifulSoup(htmlcontent, 'lxml')
         jobs_container = soup.find(id='mosaic-provider-jobcards')
+        if jobs_container is None:
+            return []
+
         job_items = jobs_container.find_all('a', class_='resultWithShelf')
 
         if job_items is None or len(job_items) == 0:
@@ -46,7 +49,6 @@ class iJobs:
                 "title" : title_elem_text,
                 "company" : company_elem.text.strip(),
                 "location" : loc_elem.text.strip(),
-                #"href" : href
                 "href" : f'https://www.indeed.com{href}'
             }
             all_jobs.append(item)
