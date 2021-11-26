@@ -25,7 +25,6 @@ blacklist = cfg['blacklist']
 # modify indeed_url, or g_terms to adjust search filters
 unfiltered_jobs = []
 for i in range(len(printed_terms)):
-    # commented out while I fix glassdoor.py
     print(f'Searching Indeed for "{printed_terms[i]}"')
     indeed_url='https://www.indeed.com/jobs?q='+i_terms[i]+i_string
     indeed1 = indeed.iJobs(indeed_url)
@@ -34,12 +33,12 @@ for i in range(len(printed_terms)):
     print('----------------------------------------------')
     unfiltered_jobs.extend(indeed_jobs)
 
-    #print(f'Searching Glassdoor for "{printed_terms[i]}"...')
-    #glassdoor1 = glassdoor.gJobs(g_terms[i])
-    #glassdoor_jobs = glassdoor1.get()
-    #print(f'Found {len(glassdoor_jobs)} jobs meeting the specified criteria')
-    #print('----------------------------------------------')
-    #unfiltered_jobs.extend(glassdoor_jobs)
+    print(f'Searching Glassdoor for "{printed_terms[i]}"...')
+    glassdoor1 = glassdoor.gJobs(g_terms[i])
+    glassdoor_jobs = glassdoor1.get()
+    print(f'Found {len(glassdoor_jobs)} jobs meeting the specified criteria')
+    print('----------------------------------------------')
+    unfiltered_jobs.extend(glassdoor_jobs)
 
 # sort jobs by title and remove all duplicates
 df = pd.DataFrame(unfiltered_jobs)

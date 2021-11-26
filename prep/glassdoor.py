@@ -31,6 +31,9 @@ class gJobs:
     def __parse_index(self, htmlcontent):
         soup = BeautifulSoup(htmlcontent, 'lxml')
         jobs_container = soup.find(attrs={"data-test": "jlGrid"})
+        if jobs_container is None:
+            return []
+        
         job_items = jobs_container.find_all(class_='react-job-listing')
 
         if job_items is None or len(job_items) == 0:
@@ -40,9 +43,9 @@ class gJobs:
 
         for job_elem in job_items:
             url_elem = job_elem.find('a', class_='jobLink')
-            title_elem = job_elem.find(attrs={"data-test": "job-link"})
-            company_elem = job_elem.find('a', class_='css-l2wjgv e1n63ojh0 jobLink')
-            loc_elem = job_elem.find('span', class_='pr-xxsm css-1ndif2q e1rrn5ka0')
+            title_elem = job_elem.find('a', class_='jobLink job-search-key-1rd3saf eigr9kq1')
+            company_elem = job_elem.find('a', class_='job-search-key-l2wjgv e1n63ojh0 jobLink')
+            loc_elem = job_elem.find('span', class_='css-1buaf54 pr-xxsm job-search-key-iii9i8 e1rrn5ka4')
 
             if None in (title_elem, company_elem, url_elem, loc_elem):
                 continue
