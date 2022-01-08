@@ -11,71 +11,69 @@
 
 #### Table of Contents
 - [Summary](#Summary)
-- [Requirements](#Requirements)
+- [Installation](#Installation)
 - [Usage](#Usage)
-- [Issues and Ideas](#Issues-and-Ideas)
 - [Contributing](#Contributing)
 - [License](#License)
-- [Terms of Service](#Terms-of-Service)
 
 ## Summary
-There are other job search programs on the internet, but as far as I am aware none of them search Glassdoor or provide a usable output. *JSAS* addresses both concerns. The software searches Indeed and Glassdoor based on user-defined criteria, sorts and filters results, removes duplicates, and returns the final list in a CSV file.
+*Job Search Automation Software* reads job search criteria from a JSON config file and performs searches across various job posting websites. Resultant jobs are added to a list which is sorted and filtered before finally being recorded to a CSV file. A PowerShell script is provided to open all job links within the CSV file.
 
-## Requirements
-You can `pip install -r requirements.txt` or individually install the necessary modules:
+This software is very similar in functionality to the [Jobert API](https://github.com/jobert-app/jobert-api). The API is prioritized regarding maintenance, while this repository exists as a simpler alternative for daily use.
+
+## Installation
+Run `pip install -r requirements.txt` or individually install the necessary modules:
 ```
-pip install requests
 pip install beautifulsoup4
 pip install lxml
-pip install selenium
 pip install pandas
-pip install tomli
+pip install selenium
 ```
 Selenium requires a driver to interface with web browsers. For Chrome, this is [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads). If you run into issues with Glassdoor and Selenium, try using ChromeDriver and following the first answer from [this Stack Overflow post](https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver).
 
 ## Usage
-`example.toml` is the only file that needs to be modified. First, change its name to `config.toml` so that the program will recognize your configuration.
+Credentials and search criteria are taken from `config.json`. An example has been provided:
 
-Searches are performed by taking terms from a list and plugging them into a URL for each website. Unfortunately and unsurprisingly, the terms must be formatted differently for each of the currently supported websites. For Indeed, terms containing multiple words must have the words separated by a plus symbol. Things get more annoying with Glassdoor. From what I've seen, the only way to make this work is for the search terms to be the entire URL, meaning a much longer list is necessary. I recommend performing the searches manually once and copying the links into the list. The search terms for Indeed  and Glassdoor are respectively stored in `i_terms` and `g_terms`, and `p_terms` is the same list formatted in regular English with spaces:
-```toml
-p_terms=["oneword","two words"]
-i_terms=["oneword","two+words"]
-g_terms=["https://www.glassdoor.com/Job/new-york-software-engineer-jobs-SRCH_IL.0,8_IC1132348_KO9,26.htm..."]
-```
-Note that Glassdoor searches are performed using Selenium and therefore take more time than Indeed searches.
-
-By utilizing `blacklist`, jobs whose titles contain undesired terms can optionally be removed from consideration. The titles are strings, so this time terms containing multiple words can be written with spaces between those words:
-
-```toml
-blacklist=["oneword", "two words"]
-```
-
-Filtering results by location, distance, and other site-specific job information is done by editing the URL before inserting the search term. This is done through `g_terms` in the case of Glassdoor and `i_string` for Indeed. `i_string` is simple enough to modify, but you could perform a manual search to get a template for the URL corresponding to your needs. Each Glassdoor URL should be individually created by doing a manual search once.
-
-```toml
-i_string = "&l=Bethpage,+NY&radius=30&jt=fulltime&explvl=entry_level&fromage=1"
-```
-
-To filter for jobs only located in your state, modify `state` with your own state's abbreviation and set the boolean value to `true`. To ignore this condition, set the boolean value to `false`.
-```toml
-state = [
-  "NY",
-  true
-]
+```json
+{
+    "gdUser": "GLASSDOOR USERNAME",
+    "gdPass": "GLASSDOOR PASSWORD",
+    "queries": [
+        {
+            "city": "New York",
+            "radius": "25",
+            "state": "NY",
+            "term": "Software Engineer"
+        },
+        {
+            "city": "New York",
+            "radius": "25",
+            "state": "NY",
+            "term": "Systems Engineer"
+        }
+    ],
+    "blacklist": [
+        "Cashier",
+        "Advisor"
+    ]
+}
 ```
 
-Run the program and `results.csv` will be created with your jobs. You can then run `jsasOpen.ps1` with PowerShell to open every link at once. It is highly suggested that you check how many results there are and maybe trim them down a bit before running this.
+Glassdoor login credentials are required. This program does not log into Indeed, so no other credentials are necessary. Search criteria is added to the `queries` list in the format shown. Any jobs whose titles contain items in the `blacklist` list will be removed before the program terminates.
 
-## Issues and Ideas
-- The biggest issue is that each search only returns jobs from the first page of search results. This shouldn't be a problem if you limit the search to the past 24 hours and use specific enough search terms. I'd like to avoid using Selenium to click through results for each job, as this dramatically increases the time required to perform a single search.
+Note that there are restrictions on acceptable `radius` values:
 
-- Glassdoor specifically tends to give many results, but it seems like most jobs posted there do not specify an experience level and therefore we cannot reasonably use that filter.
+```Python
+# Parameters allowed by radius filter on Indeed, Glassdoor
+radius_options = ['0', '5', '10', '15', '25', '50', '100']
+```
+
+Run the program and `results.csv` will be created with your jobs. You can then run `jsasOpen.ps1` with PowerShell to open every link at once. It is recommended that you check how many results there are before running this.
+
+Should the program exit with an error, a second attempt may resolve the issue. Otherwise, see `jsas.log` for debugging information.
 
 ## Contributing
-Pull requests welcome, especially concerning iterating over search result pages.
+Webscraping applications are fequently broken by website updates. If you are the first to notice such an event here, please feel free to open an issue or to address it and submit a pull request.
 
 ## License
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Terms of Service
-Use of this software not permitted in cases where its use violates the terms of service of another website. Users are encouraged to read the terms of service of such a website.
+All original software is distributed under the MIT License. User is bound to the Terms of Service of any other websites with which the user interacts with this software. [Developer](https://github.com/f-104) does not support Terms of Service violations.

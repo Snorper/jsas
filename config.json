@@ -1,0 +1,22 @@
+{
+    "gdUser": "GLASSDOOR USERNAME",
+    "gdPass": "GLASSDOOR PASSWORD",
+    "queries": [
+        {
+            "city": "New York",
+            "radius": "25",
+            "state": "NY",
+            "term": "Software Engineer"
+        },
+        {
+            "city": "New York",
+            "radius": "25",
+            "state": "NY",
+            "term": "Systems Engineer"
+        }
+    ],
+    "blacklist": [
+        "Cashier",
+        "Advisor"
+    ]
+}
