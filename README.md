@@ -59,6 +59,8 @@ Credentials and search criteria are taken from `config.json`. An example has bee
 }
 ```
 
+Note that this is an example config. Please modify and rename to `myConfig.json` in order for the software to function properly.
+
 Glassdoor login credentials are required. This program does not log into Indeed, so no other credentials are necessary. Search criteria is added to the `queries` list in the format shown. Any jobs whose titles contain items in the `blacklist` list will be removed before the program terminates.
 
 Note that there are restrictions on acceptable `radius` values:

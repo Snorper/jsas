@@ -9,7 +9,7 @@ def main():
     logging.basicConfig(filename='jsas.log', level=level, format=fmt, filemode='w')
     logger = logging.getLogger(__name__)
 
-    with open('config.json') as j:
+    with open('myConfig.json') as j:
         jsn = j.read()
 
     try:
