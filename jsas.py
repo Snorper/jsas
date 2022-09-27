@@ -44,14 +44,16 @@ def main():
     df.drop_duplicates(subset=['title', 'company', 'location'],keep='first',inplace=True)
     df.sort_values(by=['title'],inplace=True)
     df.reset_index(drop=True, inplace=True)
+    logger.info('Filtered for duplicate jobs')
 
     # remove jobs with blacklisted words in title
-    print('Removing jobs with blacklisted terms...')
+    print('Removing jobs with blacklisted terms and companies...')
     to_drop = []
     for i, row in df.iterrows():
-        if any(bad_word in row['title'] for bad_word in blacklist):
+        if any(bad_word in (row['title'], row['company']) for bad_word in blacklist):
             to_drop.append(i)
     df.drop(df.index[to_drop], inplace=True)
+    logger.info('Filtered for blacklisted terms and companies')
 
     # Write jobs df to results.csv
     print('Writing results to results.csv...')

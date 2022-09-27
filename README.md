@@ -19,7 +19,7 @@
 ## Summary
 *Job Search Automation Software* reads job search criteria from a JSON config file and performs searches across various job posting websites. Resultant jobs are added to a list which is sorted and filtered before finally being recorded to a CSV file. A PowerShell script is provided to open all job links within the CSV file.
 
-This software is very similar in functionality to the [Jobert API](https://github.com/jobert-app/jobert-api). The API is prioritized regarding maintenance, while this repository exists as a simpler alternative for daily use.
+**NOTE:** This repository (README included) was created years ago when I was inexperienced and should really be refactored, although this is not a priority.
 
 ## Installation
 Run `pip install -r requirements.txt` or individually install the necessary modules:

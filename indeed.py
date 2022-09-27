@@ -41,14 +41,19 @@ class iJobs:
         driver = webdriver.Chrome(options=options)
         
         try:
+            logger.info('Getting Indeed homepage')
             driver.get("https://indeed.com")
             checkPopup()
         except Exception:
             logger.exception('Unable to reach Indeed. Either Indeed is down or there is no internet connection')
             sys.exit(1)
 
-        attempts = 5
+        attempts = 10
         for k in range(attempts):
+            logger.info("""Attempting Indeed job search with the following criteria:
+                                 Search Term: {term}
+                                 Location: {city}, {state}
+                                 Radius: {radius} miles""".format(term=self.term, city=self.city, state=self.state, radius=self.radius))
             try:
                 # Search for current job term
                 termInputArea = driver.find_element(By.XPATH, '//*[@id="text-input-what"]')
@@ -56,6 +61,7 @@ class iJobs:
                 termInputArea.send_keys(self.term)
                 termInputArea.send_keys(Keys.ENTER)
                 checkPopup()
+                logger.info(f'Searched for {self.term}')
 
                 # Search for current job location
                 cityInput = self.city + ", " + self.state
@@ -64,6 +70,17 @@ class iJobs:
                 cityInputArea.send_keys(cityInput)
                 cityInputArea.send_keys(Keys.ENTER)
                 checkPopup()
+                logger.info(f'Filtered for {self.city}, {self.state}')
+
+                # Filter for remote only
+                
+                remote = driver.find_element(By.XPATH, '//*[@id="filter-remotejob"]')
+                remote.click()
+                checkPopup()
+                remoteYes = driver.find_element(By.XPATH, '//*[@id="filter-remotejob-menu"]/li[1]')
+                remoteYes.click()
+                checkPopup()
+                logger.info('Filtered for remote jobs only')
 
                 # Apply radius filter, only get results from last day
                 current_url = driver.current_url
@@ -71,6 +88,7 @@ class iJobs:
 
                 driver.get(new_url)
                 checkPopup()
+                logger.info(f'Filtered for radius of {self.radius} miles and jobs posted in last day')
             except Exception:
                 if k < attempts - 1:
                     logger.warning(f'Selenium error: failed attempt {k + 1} of {attempts}, trying again')
@@ -95,6 +113,7 @@ class iJobs:
             try:
                 nextButton = driver.find_element(By.XPATH, '//*[@id="resultsCol"]/nav/div/ul/li[4]/a')
                 nextButton.click()
+                logger.info(f'Clicked button {nextButton} to reach next page')
             except Exception:
                 logger.info('Reached end of results')
                 driver.quit()
@@ -106,12 +125,14 @@ class iJobs:
         # Find all jobs on page
         try:
             jobs_container = soup.find(attrs={"id": "mosaic-provider-jobcards"})
+            logger.info(f'jobs_container: {jobs_container}')
         except Exception:
             logger.error("Error finding jobs_container, returning empty list")
             return []
 
         try:
-            job_items = jobs_container.find_all('a', class_='resultWithShelf')
+            job_items = jobs_container.find_all('div', class_='resultWithShelf')
+            logger.info(f'job_items: {job_items}')
         except Exception:
             logger.error("Error finding job items, returning empty list")
             return []
@@ -122,7 +143,12 @@ class iJobs:
             title_elem_raw = job_elem.find('h2', class_='jobTitle')
             company_elem_raw = job_elem.find('span', class_='companyName')
             loc_elem_raw = job_elem.find('div', class_='companyLocation')
-            url_elem_raw = job_elem.get('href')
+            url_elem_raw = job_elem.find('a', class_='jcs-JobTitle').get('href')
+            logger.info("""Found raw job result:
+                                 Position: {title}
+                                 Company: {company}
+                                 Location: {location}
+                                 Link: {link}""".format(title=title_elem_raw,company=company_elem_raw,location=loc_elem_raw,link=url_elem_raw))
 
             # Skip invalid jobs
             if None in (title_elem_raw, company_elem_raw, loc_elem_raw, url_elem_raw):
@@ -130,7 +156,7 @@ class iJobs:
                 continue
 
             # Clean data
-            title_elem = title_elem_raw.text.strip()[3:]
+            title_elem = title_elem_raw.text.lstrip('full details of ')
             company_elem = company_elem_raw.text.strip()
             loc_elem = loc_elem_raw.text.strip()
             url_elem = f'https://indeed.com{url_elem_raw}'
@@ -143,5 +169,6 @@ class iJobs:
                 "href": url_elem
             }
             all_jobs.append(item)
+            logger.info(f'Added parsed job result to all_jobs: {item}')
 
         return all_jobs
