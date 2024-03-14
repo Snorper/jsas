@@ -39,65 +39,17 @@ class iJobs:
                 pass
 
         driver = webdriver.Chrome(options=options)
+
+        # https://www.indeed.com/jobs?q=software+engineer&l=Austin%2C+TX&sc=0kf%3Aattr%28DSQF7%29jt%28fulltime%29%3B&fromage=1
+        indeedUrl = f"https://www.indeed.com/jobs?q={self.term}&sc=0kf%3Aattr%28DSQF7%29jt%28fulltime%29%3B&fromage=1"
         
         try:
             logger.info('Getting Indeed homepage')
-            driver.get("https://indeed.com")
+            driver.get(indeedUrl)
             checkPopup()
         except Exception:
             logger.exception('Unable to reach Indeed. Either Indeed is down or there is no internet connection')
             sys.exit(1)
-
-        attempts = 10
-        for k in range(attempts):
-            logger.info("""Attempting Indeed job search with the following criteria:
-                                 Search Term: {term}
-                                 Location: {city}, {state}
-                                 Radius: {radius} miles""".format(term=self.term, city=self.city, state=self.state, radius=self.radius))
-            try:
-                # Search for current job term
-                termInputArea = driver.find_element(By.XPATH, '//*[@id="text-input-what"]')
-                termInputArea.send_keys(Keys.CONTROL, "a")
-                termInputArea.send_keys(self.term)
-                termInputArea.send_keys(Keys.ENTER)
-                checkPopup()
-                logger.info(f'Searched for {self.term}')
-
-                # Search for current job location
-                cityInput = self.city + ", " + self.state
-                cityInputArea = driver.find_element(By.XPATH, '//*[@id="text-input-where"]')
-                cityInputArea.send_keys(Keys.CONTROL, "a")
-                cityInputArea.send_keys(cityInput)
-                cityInputArea.send_keys(Keys.ENTER)
-                checkPopup()
-                logger.info(f'Filtered for {self.city}, {self.state}')
-
-                # Filter for remote only
-                
-                remote = driver.find_element(By.XPATH, '//*[@id="filter-remotejob"]')
-                remote.click()
-                checkPopup()
-                remoteYes = driver.find_element(By.XPATH, '//*[@id="filter-remotejob-menu"]/li[1]')
-                remoteYes.click()
-                checkPopup()
-                logger.info('Filtered for remote jobs only')
-
-                # Apply radius filter, only get results from last day
-                current_url = driver.current_url
-                new_url = current_url + "&radius=" + self.radius + "&fromage=1"
-
-                driver.get(new_url)
-                checkPopup()
-                logger.info(f'Filtered for radius of {self.radius} miles and jobs posted in last day')
-            except Exception:
-                if k < attempts - 1:
-                    logger.warning(f'Selenium error: failed attempt {k + 1} of {attempts}, trying again')
-                    continue
-                else:
-                    logger.exception('Failed to navigate website using Selenium, XPATH of one or more elements has likely changed')
-                    print('Failed to navigate website using Selenium, XPATH of one or more elements has likely changed.')
-                    sys.exit(1)
-            break
 
         # Parse each page and add results to list
         indeed_jobs = []
@@ -111,7 +63,7 @@ class iJobs:
                 sys.exit(1)
 
             try:
-                nextButton = driver.find_element(By.XPATH, '//*[@id="resultsCol"]/nav/div/ul/li[4]/a')
+                nextButton = driver.find_element(By.CSS_SELECTOR, 'a[data-testid="pagination-page-next"]')
                 nextButton.click()
                 logger.info(f'Clicked button {nextButton} to reach next page')
             except Exception:
@@ -124,7 +76,7 @@ class iJobs:
 
         # Find all jobs on page
         try:
-            jobs_container = soup.find(attrs={"id": "mosaic-provider-jobcards"})
+            jobs_container = soup.find(attrs={"id": "mosaic-jobResults"})
             logger.info(f'jobs_container: {jobs_container}')
         except Exception:
             logger.error("Error finding jobs_container, returning empty list")
@@ -141,8 +93,8 @@ class iJobs:
         all_jobs = []
         for job_elem in job_items:
             title_elem_raw = job_elem.find('h2', class_='jobTitle')
-            company_elem_raw = job_elem.find('span', class_='companyName')
-            loc_elem_raw = job_elem.find('div', class_='companyLocation')
+            company_elem_raw = job_elem.find('span', attrs={"data-testid": "company-name"})
+            loc_elem_raw = job_elem.find('div', attrs={"data-testid": "text-location"})
             url_elem_raw = job_elem.find('a', class_='jcs-JobTitle').get('href')
             logger.info("""Found raw job result:
                                  Position: {title}
